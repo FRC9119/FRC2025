@@ -48,6 +48,10 @@ public class Robot extends TimedRobot {
     // Algae intake motor declaration
     private SparkFlex algaeIntakeRollersMotor;
     private SparkFlex algaeIntakeHingeMotor;
+
+    // Coral intake motor declaration
+    private SparkFlex coralIntakeLeftMotor;
+    private SparkFlex coralIntakeRightMotor;
     
     // Drivetrain configuration declaration
     private final SparkMaxConfig leftFrontMotorConfig = new SparkMaxConfig();
@@ -60,6 +64,10 @@ public class Robot extends TimedRobot {
     // Algae configuration declaration
     private final SparkMaxConfig algaeIntakeRollersMotorConfig = new SparkMaxConfig();
     private final SparkMaxConfig algaeIntakeHingeMotorConfig = new SparkMaxConfig();
+
+    // Coral configuration declaration
+    private final SparkMaxConfig coralIntakeLeftMotorConfig = new SparkMaxConfig();
+    private final SparkMaxConfig coralIntakeRightMotorConfig = new SparkMaxConfig();
     
     // Differential drive train declaration.
     DifferentialDrive tankDriveTrain;
@@ -89,6 +97,10 @@ public class Robot extends TimedRobot {
             algaeIntakeRollersMotor = new SparkFlex(9, MotorType.kBrushed);
             algaeIntakeHingeMotor = new SparkFlex(8, MotorType.kBrushless);
 
+            // Coral intake motor initialization
+            coralIntakeLeftMotor = new SparkFlex(10, MotorType.kBrushed);
+            coralIntakeRightMotor = new SparkFlex(11, MotorType.kBrushed);
+
             // Drivetrain configuration intitialization
             leftFrontMotorConfig.apply(commonConfig).idleMode(IdleMode.kBrake).openLoopRampRate(0.0).closedLoopRampRate(0.0)
             .smartCurrentLimit(40,30).inverted(true);
@@ -109,6 +121,12 @@ public class Robot extends TimedRobot {
             algaeIntakeHingeMotorConfig.idleMode(IdleMode.kCoast).openLoopRampRate(0.0).closedLoopRampRate(0.0)
             .smartCurrentLimit(40,30);
 
+            // Coral intake configuration initialization
+            coralIntakeLeftMotorConfig.idleMode(IdleMode.kBrake).openLoopRampRate(0.0).closedLoopRampRate(0.0)
+            .smartCurrentLimit(40,30);
+            coralIntakeRightMotorConfig.idleMode(IdleMode.kBrake).openLoopRampRate(0.0).closedLoopRampRate(0.0)
+            .smartCurrentLimit(40,30);
+
             // Drivetrain motor configuration with safe
             leftRearMotor.configure(leftRearMotorConfig, null, PersistMode.kNoPersistParameters);
             leftFrontMotor.configure(leftFrontMotorConfig, null, PersistMode.kNoPersistParameters);
@@ -120,6 +138,10 @@ public class Robot extends TimedRobot {
             // Algae intake motor configuration with safe
             algaeIntakeRollersMotor.configure(algaeIntakeRollersMotorConfig, null, PersistMode.kNoPersistParameters);
             algaeIntakeHingeMotor.configure(algaeIntakeHingeMotorConfig, null, PersistMode.kNoPersistParameters);
+
+            // Coral intake motor configuration with safe
+            coralIntakeLeftMotor.configure(coralIntakeLeftMotorConfig, null, PersistMode.kNoPersistParameters);
+            coralIntakeRightMotor.configure(coralIntakeRightMotorConfig, null, PersistMode.kNoPersistParameters);
 
             // Makes the Smart Dashboard buttons work and make the selectable.
             sendableChooser.setDefaultOption("Do nothing.", doNothingAuto);
@@ -228,9 +250,7 @@ public class Robot extends TimedRobot {
             algaeIntakeRollersMotor.set(0);
         }
 
-
-
-       // Button mappling for hinge.
+       // Button mapping for hinge.
        if (operatorController.getPOV() == 180) {
            algaeIntakeHingeMotor.set(0.3);
       } else if (operatorController.getPOV() == 0) {
@@ -238,6 +258,20 @@ public class Robot extends TimedRobot {
        } else {
            algaeIntakeHingeMotor.set(0);
        }
+
+       // CORAL INTAKE
+       // Button mapping for rollers.
+       if (operatorController.getRawButton(1)) {
+            coralIntakeLeftMotor.set(0.5);
+            coralIntakeRightMotor.set(-0.5);
+       } else if (operatorController.getRawButton(2)) {
+            coralIntakeLeftMotor.set(-0.5);
+            coralIntakeRightMotor.set(0.5);
+       } else {
+            coralIntakeLeftMotor.set(0);
+            coralIntakeRightMotor.set(0);
+       }
+
         
     } // end teleopPeriodic method.
 }
