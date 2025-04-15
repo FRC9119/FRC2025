@@ -8,7 +8,7 @@
  */
 
 // Package declaration.
-package frc.robot;
+package frc.robot.main;
 
 // WPI import.
 
